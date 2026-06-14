@@ -1,0 +1,93 @@
+{
+	"name": "Fitness API Documentation",
+	"baseURL": {
+		"local": "http://localhost:4000",
+		"production": "https://fitnessapi-padilla.onrender.com"
+	},
+	"routes": [
+		{
+			"name": "Register",
+			"method": "POST",
+			"endpoint": "/users/register",
+			"auth": false,
+			"requestBody": {
+				"email": "legolas@gmail.com",
+				"password": "elvesLOTR"
+			},
+			"successStatus": 201,
+			"response": {
+				"message": "Registered Successfully"
+			}
+		},
+		{
+			"name": "Login",
+			"method": "POST",
+			"endpoint": "/users/login",
+			"auth": false,
+			"requestBody": {
+				"email": "legolas@gmail.com",
+				"password": "elvesLOTR"
+			},
+			"successStatus": 200,
+			"response": {
+				"access": "JWT access token"
+			}
+		},
+		{
+			"name": "Get User Details",
+			"method": "GET",
+			"endpoint": "/users/details",
+			"auth": "Bearer Token",
+			"successStatus": 200,
+			"response": {
+				"user": {
+					"_id": "67762c9ba3b164155290ac0e",
+					"email": "legolas@gmail.com",
+					"isAdmin": false,
+					"__v": 0
+				}
+			}
+		},
+		{
+			"name": "Add Workout",
+			"method": "POST",
+			"endpoint": "/workouts/addWorkout",
+			"auth": "Bearer Token",
+			"requestBody": {
+				"name": "Push Ups",
+				"duration": "15 minutes",
+				"userId": "67762c9ba3b164155290ac0e"
+			},
+			"successStatus": 201,
+			"response": {
+				"userId": "67762c9ba3b164155290ac0e",
+				"name": "Push Ups",
+				"duration": "15 minutes",
+				"status": "pending",
+				"_id": "69a111ee55cb942518d0e47b",
+				"dateAdded": "2026-02-27T03:39:26.632Z",
+				"__v": 0
+			}
+		},
+		{
+			"name": "Get My Workouts",
+			"method": "GET",
+			"endpoint": "/workouts/getMyWorkouts",
+			"auth": "Bearer Token",
+			"successStatus": 200,
+			"response": {
+				"workouts": [
+					{
+						"_id": "69a111ee55cb942518d0e47b",
+						"userId": "67762c9ba3b164155290ac0e",
+						"name": "Push Ups",
+						"duration": "15 minutes",
+						"status": "pending",
+						"dateAdded": "2026-02-27T03:39:26.632Z",
+						"__v": 0
+					}
+				]
+			}
+		}
+	]
+}
