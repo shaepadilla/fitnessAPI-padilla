@@ -15,8 +15,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Database connection
+if (!process.env.MONGODB_STRING) {
+	console.error("MONGODB_STRING is not set. Configure it in your environment (e.g. Render > Environment).");
+	process.exit(1);
+}
 mongoose.connect(process.env.MONGODB_STRING);
 mongoose.connection.once("open", () => console.log("Now connected to MongoDB Atlas"));
+mongoose.connection.on("error", (err) => console.error("MongoDB connection error:", err.message));
 
 // Routes
 app.use("/users", userRoutes);
