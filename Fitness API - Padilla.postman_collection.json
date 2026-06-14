@@ -1,0 +1,206 @@
+{
+  "info": {
+    "_postman_id": "cabbd64e-addd-4676-a2e3-75497aecfbdd",
+    "name": "Fitness API - Padilla",
+    "description": "Postman collection for the Fitness API.\n\nUsage:\n1. Set the `baseURL` variable (local by default, switch to production as needed).\n2. Run \"Register\" then \"Login\" - the access token is saved automatically to the `token` variable.\n3. Authenticated requests (Get User Details, Add Workout, Get My Workouts) use `{{token}}` via Bearer auth.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52021178",
+    "_collection_link": "https://go.postman.co/collection/52021178-cabbd64e-addd-4676-a2e3-75497aecfbdd?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"legolas@gmail.com\",\n    \"password\": \"elvesLOTR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/register",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            },
+            "description": "Register a new user. Requires email (must contain @) and password (min 8 chars). Returns 201 on success."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.access) {",
+                  "    pm.collectionVariables.set(\"token\", res.access);",
+                  "    console.log(\"Access token saved to {{token}}\");",
+                  "}",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"legolas@gmail.com\",\n    \"password\": \"elvesLOTR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseURL}}/users/login",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            },
+            "description": "Login an existing user. Returns 200 with an access token. The token is auto-saved to the `token` collection variable by the test script."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/users/details",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "users",
+                "details"
+              ]
+            },
+            "description": "Retrieve the logged-in user's details. Requires Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Workouts",
+      "item": [
+        {
+          "name": "Add Workout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Push Ups\",\n    \"duration\": \"15 minutes\",\n    \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseURL}}/workouts/addWorkout",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "workouts",
+                "addWorkout"
+              ]
+            },
+            "description": "Add a new workout. Requires Bearer token and body fields: name, duration, userId. Returns 201 with the saved workout."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Workouts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/workouts/getMyWorkouts",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "workouts",
+                "getMyWorkouts"
+              ]
+            },
+            "description": "Retrieve the logged-in user's workouts. Requires Bearer token. Returns 200 with a `workouts` array."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "http://localhost:4000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}
